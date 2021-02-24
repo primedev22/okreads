@@ -1,6 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store, ActionsSubject } from '@ngrx/store';
-import { ofType } from "@ngrx/effects";
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import {
   addToReadingList,
   clearSearch,
@@ -19,7 +18,7 @@ import { Book } from '@tmo/shared/models';
   templateUrl: './book-search.component.html',
   styleUrls: ['./book-search.component.scss']
 })
-export class BookSearchComponent implements OnInit, OnDestroy {
+export class BookSearchComponent implements OnInit {
   books: ReadingListBook[];
   subsc: Subscription;
 
@@ -29,7 +28,6 @@ export class BookSearchComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly store: Store,
-    private readonly actionsSubj: ActionsSubject,
     private readonly fb: FormBuilder,
     private readonly snackBar: MatSnackBar
   ) {}
@@ -42,22 +40,6 @@ export class BookSearchComponent implements OnInit, OnDestroy {
     this.store.select(getAllBooks).subscribe(books => {
       this.books = books;
     });
-    this.subsc = this.actionsSubj.pipe(
-      ofType(addToReadingList)
-    ).subscribe(data => {
-      const snackBarRef = this.snackBar.open('Book added.', 'Undo', {
-        duration: 3000
-      });
-      snackBarRef.onAction().subscribe(() => {
-        this.store.dispatch(removeFromReadingList({
-          item: { ...data.book, bookId: data.book.id } 
-        }));
-      });
-   });
-  }
-
-  ngOnDestroy(): void {
-    this.subsc.unsubscribe();
   }
 
   formatDate(date: void | string) {
@@ -68,6 +50,14 @@ export class BookSearchComponent implements OnInit, OnDestroy {
 
   addBookToReadingList(book: Book) {
     this.store.dispatch(addToReadingList({ book }));
+    const snackBarRef = this.snackBar.open('Book added.', 'Undo', {
+      duration: 3000
+    });
+    snackBarRef.onAction().subscribe(() => {
+      this.store.dispatch(removeFromReadingList({
+        item: { ...book, bookId: book.id } 
+      }));
+    });
   }
 
   searchExample() {
