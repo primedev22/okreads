@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { getReadingList, addToReadingList, removeFromReadingList } from '@tmo/books/data-access';
-import { ofType } from "@ngrx/effects";
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tmo-reading-list',
