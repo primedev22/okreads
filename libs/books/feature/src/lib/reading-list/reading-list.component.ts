@@ -12,12 +12,8 @@ export class ReadingListComponent {
 
   constructor(private readonly store: Store) {}
 
-  markAtReadingList(item) {
-    this.store.dispatch(markAtReadingList({ item: {
-      ...item,
-      finished: true,
-      finishedDate: new Date().toISOString()
-    } }));
+  markAtReadingList(bookId) {
+    this.store.dispatch(markAtReadingList({ id: bookId }));
   }
 
   removeFromReadingList(item) {

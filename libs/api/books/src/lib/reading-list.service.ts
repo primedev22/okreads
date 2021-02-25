@@ -23,11 +23,15 @@ export class ReadingListService {
     });
   }
 
-  async markBook(id: string, item: ReadingListItem): Promise<void> {
+  async markBook(id: string): Promise<void> {
     this.storage.update(list => {
       return list.map(x => {
         if (x.bookId === id) {
-          x = item;
+          x = {
+            ...x,
+            finished: true,
+            finishedDate: new Date().toISOString(),
+          };
         }
         return x;
       });

@@ -29,17 +29,17 @@ export const confirmedAddToReadingList = createAction(
 
 export const markAtReadingList = createAction(
   '[Reading List API] Mark at list',
-  props<{ item: ReadingListItem }>()
+  props<{ id: string }>()
 );
 
 export const failedMarkAtReadingList = createAction(
   '[Reading List API] Failed mark at list',
-  props<{ item: ReadingListItem }>()
+  props<{ id: string }>()
 );
 
 export const confirmedMarkAtReadingList = createAction(
   '[Reading List API] Confirmed mark at list',
-  props<{ item: ReadingListItem }>()
+  props<{ id: string }>()
 );
 
 export const removeFromReadingList = createAction(

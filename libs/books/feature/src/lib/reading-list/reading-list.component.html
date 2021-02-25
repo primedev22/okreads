@@ -14,14 +14,14 @@
         mat-icon-button
         color="accent"
         [attr.aria-label]="'Mark ' + b.title + ' as read at reading list'"
-        (click)="markAtReadingList(b)"
+        (click)="markAtReadingList(b.bookId)"
         aria-label="Mark At ReadingList"
         data-testing="mark-as-read"
         *ngIf="!b.finished"
       >
         <mat-icon>check_circle</mat-icon>
       </button>
-      <div *ngIf="b.finished">{{ b.finishedDate | date:'HH:mm MMM d, y' }}</div>
+      <div *ngIf="b.finished">{{ b.finishedDate | formatDate }}</div>
       <button
         mat-icon-button
         color="warn"

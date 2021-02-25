@@ -17,8 +17,8 @@ export class ReadingListController {
   }
 
   @Put('/reading-list/:id/finished')
-  async markFromReadingList(@Param() params, @Body() item: ReadingListItem) {
-    return await this.readingList.markBook(params.id, item);
+  async markFromReadingList(@Param() params) {
+    return await this.readingList.markBook(params.id);
   }
 
   @Delete('/reading-list/:id')
