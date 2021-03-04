@@ -27,7 +27,7 @@
           <div><strong>Author:</strong> {{ b.authors.join(',') }}</div>
           <div><strong>Publisher:</strong> {{ b.publisher }}</div>
           <div>
-            <strong>Published:</strong> {{ formatDate(b.publishedDate) }}
+            <strong>Published:</strong> {{ b.publishedDate | formatDate }}
           </div>
           <p [innerHTML]="b.description"></p>
           <div>
@@ -36,8 +36,12 @@
               color="primary"
               (click)="addBookToReadingList(b)"
               [disabled]="b.isAdded"
+              data-testing="book-btn"
             >
-              Want to Read
+              <ng-container *ngIf="b?.finished; else notFinished">
+                Finished
+              </ng-container>
+              <ng-template #notFinished>Want to Read</ng-template>
             </button>
           </div>
         </div>
