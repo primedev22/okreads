@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import {
   addToReadingList,
   clearSearch,
@@ -15,12 +17,14 @@ import { Book } from '@tmo/shared/models';
   templateUrl: './book-search.component.html',
   styleUrls: ['./book-search.component.scss']
 })
-export class BookSearchComponent implements OnInit {
+export class BookSearchComponent implements OnInit, OnDestroy {
   books: ReadingListBook[];
 
   searchForm = this.fb.group({
     term: ''
   });
+
+  searchFormSubs: Subscription;
 
   constructor(
     private readonly store: Store,
@@ -35,6 +39,14 @@ export class BookSearchComponent implements OnInit {
     this.store.select(getAllBooks).subscribe(books => {
       this.books = books;
     });
+    this.searchFormSubs = this.searchForm.get('term').valueChanges.pipe(debounceTime(500), distinctUntilChanged())
+    .subscribe((changes) => {
+      this.searchBooks();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.searchFormSubs.unsubscribe();
   }
 
   formatDate(date: void | string) {
